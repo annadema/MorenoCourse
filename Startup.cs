@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using MorenoCourse.Controllers;
 
 namespace MorenoCourse
 {
@@ -15,6 +16,7 @@ namespace MorenoCourse
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -26,13 +28,15 @@ namespace MorenoCourse
             }
             app.UseStaticFiles();
 
-            app.Run(async (context) =>
+            app.UseMvc(routeBilder =>
             {
-                string name = context.Request.Query["name"];
-                await context.Response.WriteAsync($"Hello {name}!");
+                // /courses/detail/5
+                routeBilder.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
 
-                // System.Console.WriteLine(context.Request.Host);
-            });
+            }
+            );
+            // app.UseMvcWithDefaultRoute();
+
         }
     }
 }
